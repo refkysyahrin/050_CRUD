@@ -27,24 +27,37 @@ db.connect((err) => {
     return;
   }
   console.log("Connected successfully to database");
-})
+});
 
-app.get('api/users', (req, res) => {
-  db.query('SELECT * from users', (err, results) => {
+app.get("api/users", (req, res) => {
+  db.query("SELECT * from users", (err, results) => {
     if (err) {
-      console.error('Error executing query:' + err.stack);
-      res.status(500).send( 'error ferching user');
+      console.error("Error executing query:" + err.stack);
+      res.status(500).send("error ferching user");
       return;
     }
     res.json(results);
   });
 });
 
-app.post('/api/users', (req, res) => {
+app.post("/api/users", (req, res) => {
   const { nama, nim, kelas } = req.body;
 
   if (!nama || !nim || !kelas) {
-    return res.status(400).json({ ,message: "Nama, NIM, dan Kelas wajin diisi."'});
+    return res
+      .status(400)
+      .json({ message: "Nama, NIM, dan Kelas wajin diisi." });
   }
 
-  
+  db.query(
+    "INSERT INTO users (nama, nim, kelas) VALUES (?, ?, ?)",
+    [nama, nim, kelas],
+    (err, results) => {
+      if (err) {
+        console.error(err);
+        return res.status(500).json({ message: "Database error" });
+      }
+      res.status(201).json({ message: "User created successfully" });
+    }
+  );
+});
