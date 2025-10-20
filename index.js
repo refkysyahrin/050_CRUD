@@ -37,5 +37,14 @@ app.get('api/users', (req, res) => {
       return;
     }
     res.json(results);
-}):
+  });
 });
+
+app.post('/api/users', (req, res) => {
+  const { nama, nim, kelas } = req.body;
+
+  if (!nama || !nim || !kelas) {
+    return res.status(400).json({ ,message: "Nama, NIM, dan Kelas wajin diisi."'});
+  }
+
+  
