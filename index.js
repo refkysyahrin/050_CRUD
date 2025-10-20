@@ -1,5 +1,5 @@
 const express = require("express");
-let msql = require("mysql");
+let msql = require("mysql2");
 const app = express();
 const port = 3000;
 app.use(express.json());
@@ -9,8 +9,8 @@ app.get("/", (req, res) => {
   res.send("Hello World!");
 });
 
-app.listen(PORT, () => {
-  console.log(`Example app listening on port ${PORT}`);
+app.listen(port, () => {
+  console.log(`Example app listening on port ${port}`);
 });
 
 const db = msql.createConnection({
@@ -29,8 +29,8 @@ db.connect((err) => {
   console.log("Connected successfully to database");
 });
 
-app.get("api/users", (req, res) => {
-  db.query("SELECT * from users", (err, results) => {
+app.get("/api/users", (req, res) => {
+  db.query("SELECT * from mahasiswa", (err, results) => {
     if (err) {
       console.error("Error executing query:" + err.stack);
       res.status(500).send("error ferching user");
@@ -50,7 +50,7 @@ app.post("/api/users", (req, res) => {
   }
 
   db.query(
-    "INSERT INTO users (nama, nim, kelas) VALUES (?, ?, ?)",
+    "INSERT INTO mahasiswa (nama, nim, kelas) VALUES (?, ?, ?)",
     [nama, nim, kelas],
     (err, results) => {
       if (err) {
