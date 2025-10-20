@@ -9,8 +9,8 @@ app.get("/", (req, res) => {
   res.send("Hello World!");
 });
 
-app.listen(port, () => {
-  console.log(`Example app listening on port ${port}`);
+app.listen(PORT, () => {
+  console.log(`Example app listening on port ${PORT}`);
 });
 
 const db = msql.createConnection({
@@ -27,4 +27,15 @@ db.connect((err) => {
     return;
   }
   console.log("Connected successfully to database");
+})
+
+app.get('api/users', (req, res) => {
+  db.query('SELECT * from users', (err, results) => {
+    if (err) {
+      console.error('Error executing query:' + err.stack);
+      res.status(500).send( 'error ferching user');
+      return;
+    }
+    res.json(results);
+}):
 });
